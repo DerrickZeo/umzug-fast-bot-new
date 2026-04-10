@@ -1,0 +1,19 @@
+[Unit]
+Description=Umzug Fast Bot - Playwright Gmail Trigger
+After=network.target
+
+[Service]
+# Replace 'username' with your actual VM username
+User=username
+WorkingDirectory=/home/username/umzug-fast-bot
+ExecStart=/usr/bin/node src/index.js
+Restart=always
+# Wait 5 seconds before restarting after a crash
+RestartSec=5
+# Output logs to syslog for easy viewing
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=umzug-bot
+
+[Install]
+WantedBy=multi-user.target
