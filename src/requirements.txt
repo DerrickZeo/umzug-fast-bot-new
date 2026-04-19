@@ -1,0 +1,7 @@
+npm install
+npx playwright install chromium
+
+# for VM
+npx playwright install --with-deps chromium
+
+npm install googleapis

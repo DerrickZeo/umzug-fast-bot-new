@@ -3,7 +3,7 @@ const readline = require("readline");
 const { google } = require("googleapis");
 
 const SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"];
-const TOKEN_PATH = "token.json";
+const TOKEN_PATH = "token_fleuwaing.json";
 
 async function run() {
   // To this (if the JSON is in the same folder as the script):
@@ -41,7 +41,7 @@ async function run() {
       const { tokens } = await oAuth2Client.getToken(cleanCode);
       oAuth2Client.setCredentials(tokens);
       fs.writeFileSync(TOKEN_PATH, JSON.stringify(tokens));
-      console.log("✅ token.json saved.");
+      console.log("✅", TOKEN_PATH, "saved.");
 
       // FIX: Initialize the gmail object properly here
       const gmail = google.gmail({ version: "v1", auth: oAuth2Client });

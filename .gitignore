@@ -1,2 +1,9 @@
 .env 
 token*
+auth*
+token*
+node_modules/
+logs/
+package-lock*
+setup_token*
+credentials*

@@ -14,6 +14,11 @@ async function main() {
     },
     log,
   );
+  console.log(
+    "Checking Env:",
+    process.env.LOGIN_USERNAME,
+    process.env.LOGIN_PASSWORD,
+  );
 
   await bot.initialize();
 
@@ -22,10 +27,24 @@ async function main() {
 
   log.info("👂 Monitoring Gmail notifications...");
 
+  let isProcessing = false; // Flag to prevent concurrent processing
+
   subscription.on("message", async (message) => {
     message.ack(); // Acknowledge immediately
     log.info("🔔 Trigger received.");
-    await bot.triggerAccept();
+    if (isProcessing) {
+      log.info("⏳ Trigger ignored: Bot is already busy processing a job.");
+      return;
+    }
+    isProcessing = true;
+    try {
+      await bot.triggerAccept();
+    } catch (err) {
+      log.error("❌ Execution error:", err.message);
+    } finally {
+      isProcessing = false;
+      log.info("🏁 Ready for the next trigger.");
+    }
   });
 }
 
