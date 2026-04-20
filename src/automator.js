@@ -69,7 +69,7 @@ class UmzugAutomator {
     }
   }
 
-  async _dismissOverlays() {
+  /*async _dismissOverlays() {
     await this.page
       .evaluate(() => {
         // Add cms-accept-tags specifically and any dialogs
@@ -81,6 +81,36 @@ class UmzugAutomator {
         });
       })
       .catch(() => {});
+  }*/
+
+  async _dismissOverlays() {
+    await this.page
+      .evaluate(() => {
+        // 1. Identify all possible blocking elements
+        const selectors = [
+          "cms-accept-tags",
+          ".mod_cms_accept_tags",
+          "[role='dialog']",
+          ".cookiebar",
+          ".modal-backdrop",
+          "#cn-container",
+        ];
+
+        selectors.forEach((selector) => {
+          document.querySelectorAll(selector).forEach((el) => {
+            el.remove(); // Physically delete from DOM
+          });
+        });
+
+        // 2. IMPORTANT: Reset the body overflow to ensure we can click/scroll
+        document.body.style.overflow = "auto";
+        document.body.style.pointerEvents = "auto";
+
+        // 3. Remove any 'modal-open' classes that lock the screen
+        document.documentElement.classList.remove("modal-open");
+        document.body.classList.remove("modal-open");
+      })
+      .catch(() => {});
   }
 
   async triggerAccept() {
@@ -90,7 +120,10 @@ class UmzugAutomator {
     try {
       // 1. Submit the pre-filled form
       // We click and wait for the URL change separately to avoid race conditions
-      await this.page.click('button[type="submit"]');
+      //await this.page.click('button[type="submit"]');
+
+      // Replace your old click line with this:
+      await this.page.$eval('button[type="submit"]', (el) => el.click());
 
       // Wait for the 'intern' area (increased timeout to 10s)
       await this.page.waitForURL(/\/intern\//, { timeout: 5000 });

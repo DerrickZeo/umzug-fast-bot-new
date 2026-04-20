@@ -3,7 +3,7 @@ const readline = require("readline");
 const { google } = require("googleapis");
 
 const SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"];
-const TOKEN_PATH = "token_fleuwaing.json";
+const TOKEN_PATH = "token_wilfried.json";
 
 async function run() {
   // To this (if the JSON is in the same folder as the script):
